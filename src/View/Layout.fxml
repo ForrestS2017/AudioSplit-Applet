@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainController">
   <children>
     <MenuBar fx:id="MenuBar" VBox.vgrow="NEVER">
       <menus>
@@ -30,12 +30,14 @@
             <MenuItem fx:id="MenuItemOpen" mnemonicParsing="false" onAction="#OpenAlbum" text="Open…" />
             <Menu fx:id="MenuItemOpenRecent" mnemonicParsing="false" text="Open Recent" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem fx:id="MenuItemSave" mnemonicParsing="false" onAction="#SaveProject" text="Save" />
-            <MenuItem fx:id="MenuItemSaveAs" mnemonicParsing="false" onAction="#SaveProjectAs" text="Save As…" />
+            <MenuItem fx:id="MenuItemSave" mnemonicParsing="false" onAction="#SaveAlbum" text="Save" />
+            <MenuItem fx:id="MenuItemSaveAs" mnemonicParsing="false" onAction="#SaveAlbumAs" text="Save As…" />
             <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="MenuItemImportSongLink" mnemonicParsing="false" onAction="#ImportSongViaLink" text="Import Song Link" />
-                  <MenuItem fx:id="MenuItemImportSongFile" mnemonicParsing="false" onAction="#ImportSongViaFile" text="Import Song File" />
+                  <MenuItem fx:id="MenuItemImportTrackLink" mnemonicParsing="false" onAction="#ImportTrackViaLink" text="Import Track Link" />
+                  <MenuItem fx:id="MenuItemImportTrackFile" mnemonicParsing="false" onAction="#ImportTrackViaFile" text="Import Track File" />
                   <MenuItem fx:id="MenuItemAutoSplit" mnemonicParsing="false" onAction="#AutoSplit" text="Auto-Split (Experimental)" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="MenuItemExportAlbum" mnemonicParsing="false" onAction="#ExportAlbum" text="Export Album" />
           </items>
         </Menu>
         <Menu fx:id="MenuEdit" mnemonicParsing="false" text="Edit">
@@ -65,8 +67,8 @@
               </textFill>
             </Label>
                   <ListView fx:id="ListViewTracks" layoutY="41.0" prefHeight="461.0" prefWidth="248.0" />
-                  <Button fx:id="ButtonMoveSongUp" layoutX="18.0" layoutY="513.0" mnemonicParsing="false" onAction="#MoveSongUp" text="&lt;-" />
-                  <Button fx:id="ButtonMoveSongDown" layoutX="204.0" layoutY="513.0" mnemonicParsing="false" onAction="#MoveSongDown" text="-&gt;" />
+                  <Button fx:id="ButtonMoveTrackUp" layoutX="18.0" layoutY="513.0" mnemonicParsing="false" onAction="#MoveTrackUp" text="&lt;-" />
+                  <Button fx:id="ButtonMoveTrackDown" layoutX="204.0" layoutY="513.0" mnemonicParsing="false" onAction="#MoveTrackDown" text="-&gt;" />
           </children>
         </AnchorPane>
         <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
@@ -74,16 +76,18 @@
             <AnchorPane id="Content" fx:id="PreviewPane" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0">
               <children>
                 <Label fx:id="LabelTrackTitle" alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Track Preview" textAlignment="CENTER" textFill="$x2" wrapText="false" />
-                        <ImageView fx:id="ImageViewAlbumCover" fitHeight="234.0" fitWidth="312.0" layoutX="59.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true" />
-                        <Button fx:id="ButtonSongPrevious" layoutX="14.0" layoutY="506.0" mnemonicParsing="false" onAction="#ShowPreviousSong" text="&lt;" />
-                        <Button fx:id="ButtonSongNext" layoutX="391.0" layoutY="506.0" mnemonicParsing="false" onAction="#ShowNextSong" text="&gt;" />
-                        <Text fx:id="TextTrackTitle" layoutX="174.0" layoutY="409.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Track Title" textAlignment="CENTER" wrappingWidth="83.0" />
-                        <TextField fx:id="TextFieldTrackTitle" layoutX="143.0" layoutY="423.0" />
-                        <Text fx:id="TextTrackStartTime" layoutX="167.0" layoutY="469.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Track Start Time" textAlignment="CENTER" wrappingWidth="101.0" />
-                        <TextField fx:id="TextFieldTrackStartTime" layoutX="143.0" layoutY="481.0" />
-                        <Button fx:id="ButtonUpdateAlbumCover" layoutX="154.0" layoutY="316.0" mnemonicParsing="false" onAction="#UpdateAlbumCover" text="Update Album Cover" textAlignment="CENTER" />
-                        <Button fx:id="ButtonInsertSongBefore" layoutX="47.0" layoutY="506.0" mnemonicParsing="false" onAction="#InsertSongBefore" text="+" />
-                        <Button fx:id="ButtonInsertSongAfter" layoutX="359.0" layoutY="506.0" mnemonicParsing="false" onAction="#InsertSongAfter" text="+" />
+                        <ImageView fx:id="ImageViewAlbumCover" fitHeight="219.0" fitWidth="279.0" layoutX="76.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button fx:id="ButtonTrackPrevious" layoutX="14.0" layoutY="506.0" mnemonicParsing="false" onAction="#ShowPreviousTrack" text="&lt;" />
+                        <Button fx:id="ButtonTrackNext" layoutX="391.0" layoutY="506.0" mnemonicParsing="false" onAction="#ShowNextTrack" text="&gt;" />
+                        <Text fx:id="TextTrackTitle" layoutX="174.0" layoutY="384.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Track Title" textAlignment="CENTER" wrappingWidth="83.0" />
+                        <TextField fx:id="TextFieldTrackTitle" layoutX="143.0" layoutY="398.0" />
+                        <Text fx:id="TextTrackStartTime" layoutX="167.0" layoutY="444.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Track Start Time" textAlignment="CENTER" wrappingWidth="101.0" />
+                        <TextField fx:id="TextFieldTrackStartTime" layoutX="143.0" layoutY="456.0" />
+                        <Button fx:id="ButtonUpdateAlbumCover" layoutX="154.0" layoutY="302.0" mnemonicParsing="false" onAction="#UpdateAlbumCover" text="Update Album Cover" textAlignment="CENTER" />
+                        <Button fx:id="ButtonInsertTrackBefore" layoutX="47.0" layoutY="506.0" mnemonicParsing="false" onAction="#InsertTrackBefore" text="+" />
+                        <Button fx:id="ButtonInsertTrackAfter" layoutX="359.0" layoutY="506.0" mnemonicParsing="false" onAction="#InsertTrackAfter" text="+" />
+                        <Button fx:id="ButtonUpdateTrack" layoutX="172.0" layoutY="506.0" mnemonicParsing="false" onAction="#UpdateTrack" text="Update Track" textAlignment="CENTER" />
+                        <Text fx:id="TextTrackNumber" layoutX="176.0" layoutY="351.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;Track Num&gt;" textAlignment="CENTER" wrappingWidth="83.0" />
               </children>
             </AnchorPane>
           </content>
@@ -111,7 +115,7 @@
     </SplitPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
-        <Label fx:id="LabelSongPrevious" maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Previous Song" HBox.hgrow="ALWAYS">
+        <Label fx:id="LabelTrackPrevious" maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Previous Track" HBox.hgrow="ALWAYS">
           <font>
             <Font size="11.0" fx:id="x3" />
           </font>
@@ -120,7 +124,7 @@
           </textFill>
         </Label>
         <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-        <Label fx:id="LabelSongNext" font="$x3" maxWidth="-1.0" text="Next Song" textFill="$x4" HBox.hgrow="NEVER" />
+        <Label fx:id="LabelTrackNext" font="$x3" maxWidth="-1.0" text="Next Track" textFill="$x4" HBox.hgrow="NEVER" />
       </children>
       <padding>
         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
